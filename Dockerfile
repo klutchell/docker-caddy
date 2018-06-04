@@ -1,7 +1,7 @@
 # resin caddy image modified to run on arm32v7
 # original source: https://github.com/resin-io/resin-caddy
 
-FROM arm32v7/golang as build
+FROM armhf/golang as build
 
 LABEL maintainer="kylemharding@gmail.com"
 
