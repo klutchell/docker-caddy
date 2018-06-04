@@ -7,7 +7,7 @@ LABEL maintainer="kylemharding@gmail.com"
 
 RUN apk update
 RUN apk add git
-RUN go get github.com/mholt/caddy/caddy
+RUN go get github.com/mholt/caddy
 RUN go get github.com/caddyserver/builds
 
 WORKDIR $GOPATH/src/github.com/mholt/caddy/caddy
