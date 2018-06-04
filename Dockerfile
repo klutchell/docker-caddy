@@ -15,7 +15,7 @@ RUN go run build.go
 RUN mkdir /out
 RUN cp caddy /out/caddy
 
-FROM armhf/alpine:3.5
+FROM arm32v6/alpine:3.7
 
 COPY --from=build /out/caddy /usr/local/bin/caddy
 
