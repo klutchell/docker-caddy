@@ -21,3 +21,6 @@ ENTRYPOINT ["/usr/local/bin/caddy"]
 
 CMD ["-agree", "-conf", "/var/lib/caddy/Caddyfile"]
 
+# end cross build
+RUN [ "cross-build-end" ]
+
