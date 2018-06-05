@@ -20,6 +20,9 @@ RUN curl https://getcaddy.com | bash -s personal $PLUGINS
 WORKDIR /usr/src/app
 COPY . /usr/src/app/
 
+RUN curl -o index.html https://raw.githubusercontent.com/abiosoft/caddy-docker/master/index.html \
+	&& curl -o Caddyfile https://raw.githubusercontent.com/abiosoft/caddy-docker/master/Caddyfile
+
 # expose ports
 EXPOSE 80 443 2015
 
