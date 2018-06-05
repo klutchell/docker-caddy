@@ -28,8 +28,11 @@ EXPOSE 80 443 2015
 # persist caddy data
 VOLUME /usr/src/app
 
+# install start script
+COPY start.sh /usr/local/bin/
+
 # run caddy on boot
-CMD ["/bin/sh", "-c" "/usr/local/bin/caddy -agree -conf \"$CADDY_FILE\" -email \"$ACME_EMAIL\""]
+CMD [ "/usr/local/bin/start.sh" ]
 
 # end cross build
 RUN [ "cross-build-end" ]
