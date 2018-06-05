@@ -2,19 +2,22 @@
 
 [caddy](https://caddyserver.com/) service for [resin.io](https://resin.io/) stacks
 
-## Getting Started
+## Build
 
-* https://docs.resin.io/learn/getting-started
-* https://caddyserver.com/tutorial/caddyfile
+```bash
+make build
+docker login
+make push
+```
 
-## Deployment
+## Deploy
 
 ```bash
 docker run --name caddy \
 -v caddy-data:/var/lib/caddy \
 -v caddy-certs:/root/.caddy \
 -p 80:80 -p 443:443 \
-klutchell/resin-caddy
+klutchell/resin-caddy:latest
 ```
 
 ## Usage
