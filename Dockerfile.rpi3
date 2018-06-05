@@ -14,6 +14,11 @@ RUN apk add --no-cache curl
 # install caddy
 RUN curl https://getcaddy.com | bash -s personal $PLUGINS
 
+WORKDIR /var/lib/caddy
+
+# install example caddyfile
+RUN curl -o Caddyfile https://raw.githubusercontent.com/caddyserver/examples/master/basicauthproxy/Caddyfile
+
 # expose ports
 EXPOSE 80 443 2015
 
