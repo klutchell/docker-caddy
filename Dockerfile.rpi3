@@ -16,9 +16,8 @@ RUN apk add --no-cache curl
 # install caddy
 RUN curl https://getcaddy.com | bash -s personal $PLUGINS
 
-# copy src files
+# install example files
 WORKDIR /usr/src/app
-COPY . /usr/src/app/
 
 RUN curl -o index.html https://raw.githubusercontent.com/abiosoft/caddy-docker/master/index.html \
 	&& curl -o Caddyfile https://raw.githubusercontent.com/abiosoft/caddy-docker/master/Caddyfile
@@ -26,8 +25,11 @@ RUN curl -o index.html https://raw.githubusercontent.com/abiosoft/caddy-docker/m
 # expose ports
 EXPOSE 80 443 2015
 
-# run start script on boot
-CMD ["/bin/sh", "start.sh"]
+# persist caddy data
+VOLUME /usr/src/app
+
+# run caddy on boot
+CMD ["/bin/sh", "-c" "/usr/local/bin/caddy -agree -conf \"$CADDY_FILE\" -email \"$ACME_EMAIL\""]
 
 # end cross build
 RUN [ "cross-build-end" ]
