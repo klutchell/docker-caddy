@@ -4,8 +4,6 @@
 
 ## Build
 
-## Build
-
 ```bash
 # build for rpi3
 make build-rpi3
