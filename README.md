@@ -1,29 +1,36 @@
-# resin-caddy
+# docker-caddy
 
-[caddy](https://caddyserver.com/) service for [resin.io](https://resin.io/) stacks
+[caddy](https://caddyserver.com/) docker images
+
+## Build
 
 ## Build
 
 ```bash
-make build
-docker login
-make push
+# build for rpi3
+make build-rpi3
 ```
 
 ## Deploy
 
 ```bash
+# deploy on rpi3
 docker run --name caddy \
 -v caddy-data:/var/lib/caddy \
 -v caddy-certs:/root/.caddy \
 -p 80:80 -p 443:443 \
-klutchell/resin-caddy:latest
+klutchell/caddy:rpi3-latest
 ```
+
+## Parameters
+
+* `-v caddy-data:/var/lib/caddy` - persistent data volume
+* `-v caddy-certs:/root/.caddy` - persistent certificates volume
+* `-p 80:80 -p 443:443` - ports to expose
 
 ## Usage
 
-use the [resin web terminal](https://docs.resin.io/learn/manage/ssh-access/#using-the-dashboard-web-terminal)
-to create `/var/lib/caddy/Caddyfile` with your server definitions
+* add server definitions to `/var/lib/caddy/Caddyfile`
 
 ## Author
 

@@ -1,15 +1,37 @@
-NAME	:= $$(git config --get remote.origin.url | sed -r 's/.*:(.+)\.git/\1/')
+NS		:= klutchell
+REPO	:= caddy
 TAG		:= $$(git rev-parse --short HEAD)
-IMG		:= ${NAME}:${TAG}
-LATEST	:= ${NAME}:latest
+IMG		:= ${NS}/${REPO}
 
 build:
-	@docker build -t ${IMG} .
-	@docker tag ${IMG} ${LATEST}
+	@docker build -t ${IMG}:${TAG} .
+	@docker tag ${IMG}:${TAG} ${IMG}:latest
+
+build-rpi3:
+	@docker build -t ${IMG}:rpi3-${TAG} -f Dockerfile.rpi3 .
+	@docker tag ${IMG}:rpi3-${TAG} ${IMG}:rpi3-latest
 
 build-nc:
 	@docker build --no-cache -t ${IMG} .
-	@docker tag ${IMG} ${LATEST}
+	@docker tag ${IMG}:${TAG} ${IMG}:latest
+
+build-rpi3-nc:
+	@docker build --no-cache -t ${IMG}:rpi3-${TAG} -f Dockerfile.rpi3 .
+	@docker tag ${IMG}:rpi3-${TAG} ${IMG}:rpi3-latest
 
 push:
-	@docker push ${NAME}
+	@docker push ${IMG}:${TAG}
+	@docker push ${IMG}:latest
+
+push-rpi3:
+	@docker push ${IMG}:rpi3-${TAG}
+	@docker push ${IMG}:rpi3-latest
+
+release: build tag push
+
+release-rpi3: build-rpi3 push-rpi3
+
+rpi3: build-rpi3
+
+default: build
+
