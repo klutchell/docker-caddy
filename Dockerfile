@@ -1,29 +1,20 @@
-FROM arm32v6/golang:1.9-alpine as build
+FROM resin/raspberrypi3-alpine:3.6
 
 LABEL maintainer="kylemharding@gmail.com"
 
-ENV plugins "$plugins github.com/freman/caddy-reauth"
-ENV plugins "$plugins github.com/caddyserver/dnsproviders/tree/master/cloudflare"
+# allow building on x86
+RUN [ "cross-build-start" ]
 
-RUN apk add --no-cache git sed
+# default plugins
+ARG PLUGINS="http.reauth,tls.dns.cloudflare"
 
-RUN go get github.com/mholt/caddy/caddy
-RUN go get github.com/caddyserver/builds
+# install curl
+RUN apk add --no-cache curl
 
-WORKDIR $GOPATH/src/github.com/mholt/caddy/caddy
+# install caddy
+RUN curl https://getcaddy.com | bash -s personal $PLUGINS
 
-RUN for plugin_url in plugins; do \
-	sed -i "/(imported)/a _ \"$plugin_url\"" caddymain/run.go; \
-	done
-
-RUN go run build.go
-
-RUN mkdir /out && cp caddy /out/caddy
-
-FROM arm32v6/alpine:3.7
-
-COPY --from=build /out/caddy /usr/local/bin/caddy
-
+# expose ports
 EXPOSE 80 443 2015
 
 ENTRYPOINT ["/usr/local/bin/caddy"]
