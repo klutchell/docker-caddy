@@ -13,8 +13,8 @@ ARG PLUGINS="http.reauth,tls.dns.cloudflare"
 # caddyfile path
 ENV CADDY_FILE /usr/src/app/Caddyfile
 
-# install curl
-RUN apk add --no-cache curl bash
+# install curl, bash, and tzdata
+RUN apk add --no-cache curl bash tzdata
 
 # install caddy
 RUN curl -sSL https://getcaddy.com | bash -s personal $PLUGINS
