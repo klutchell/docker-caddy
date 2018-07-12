@@ -14,6 +14,9 @@ ARG PLUGINS="http.reauth,tls.dns.cloudflare,http.git,http.filemanager,http.cors,
 ENV CADDY_ROOT /www
 ENV CADDY_FILE /www/Caddyfile
 
+# allow building on x86
+RUN [ "cross-build-start" ]
+
 # install curl, bash, gnupg, and tzdata
 RUN apk add --no-cache curl bash tzdata gnupg
 

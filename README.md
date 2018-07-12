@@ -20,7 +20,7 @@ docker run --name caddy \
     -v /path/to/caddyfile:/usr/src/app/Caddyfile
     -v caddy_root:/www \
     -v caddy_certs:/root/.caddy \
-    -p 80:80 -p 443:443 p 2015:2015 \
+    -p 80:80 -p 443:443 -p 2015:2015 \
     -e CADDY_EMAIL=example@address.com \
     klutchell/caddy
 ```
