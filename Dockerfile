@@ -8,14 +8,14 @@ LABEL build_date="${BUILD_DATE}"
 LABEL maintainer="kylemharding@gmail.com"
 
 # default plugins
-ARG PLUGINS="http.reauth,tls.dns.cloudflare"
+ARG PLUGINS="http.reauth,tls.dns.cloudflare,http.git,http.filemanager,http.cors,http.realip,http.expires,http.cache"
 
 # caddyfile env vars
 ENV CADDY_ROOT /www
 ENV CADDY_FILE /www/Caddyfile
 
-# install curl, bash, and tzdata
-RUN apk add --no-cache curl bash tzdata
+# install curl, bash, gnupg, and tzdata
+RUN apk add --no-cache curl bash tzdata gnupg
 
 # install caddy
 RUN curl -sSL https://getcaddy.com | bash -s personal $PLUGINS
