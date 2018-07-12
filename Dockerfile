@@ -10,8 +10,9 @@ LABEL maintainer="kylemharding@gmail.com"
 # default plugins
 ARG PLUGINS="http.reauth,tls.dns.cloudflare"
 
-# caddyfile path
-ENV CADDY_FILE /usr/src/app/Caddyfile
+# caddyfile env vars
+ENV CADDY_ROOT /www
+ENV CADDY_FILE /www/Caddyfile
 
 # install curl, bash, and tzdata
 RUN apk add --no-cache curl bash tzdata
@@ -23,13 +24,19 @@ RUN curl -sSL https://getcaddy.com | bash -s personal $PLUGINS
 WORKDIR /usr/src/app
 
 # copy src files
-COPY start.sh index.html Caddyfile ./
+COPY start.sh ./
+
+# work in caddy root
+WORKDIR ${CADDY_ROOT}
+
+# copy src files
+COPY index.html Caddyfile ./
+
+# persist caddy root
+VOLUME ${CADDY_ROOT}
 
 # expose ports
 EXPOSE 80 443 2015
 
-# persist caddy data
-VOLUME /usr/src/app
-
 # run start script on boot
-CMD ["/bin/sh", "start.sh"]
+CMD ["/bin/sh", "/usr/src/app/start.sh"]

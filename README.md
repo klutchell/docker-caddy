@@ -30,12 +30,14 @@ docker run --name caddy \
 
 |Name|Description|Example|
 |---|---|---|
-|`ACME_EMAIL`|email address to agree to LetsEncrypt TOS|`your@email.com`|
-|`TZ`|(optional) container timezone|`America/Toronto`|
+|`CADDY_EMAIL`|email address to use for TLS certificate generation|`example@address.com`|
+|`CADDY_ROOT`|path to the default site root from which to serve files|`/www`|
+|`CADDY_FILE`|the caddyfile to use to configure caddy|`/www/Caddyfile`|
+|`TZ`|container timezone|`America/Toronto`|
 
 ## Usage
 
-add server definitions to `/var/lib/caddy/Caddyfile` or mount your own Caddyfile
+add server definitions to `/www/Caddyfile` or mount your own Caddyfile
 
 ## Author
 
