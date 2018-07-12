@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+    caddy:
+        image: klutchell/caddy
+        container_name: caddy
+        ports:
+            - 80:80
+            - 443:443
+        restart: unless-stopped
+        volumes:
+            - ./Caddyfile:/usr/src/app/Caddyfile
+            - caddy_data:/var/lib/caddy
+            - caddy_certs:/root/.caddy
+        environment:
+            - TZ=America/Toronto
+            - ACME_EMAIL=your@email.com
+
+volumes:
+    caddy_data:
+    caddy_certs:

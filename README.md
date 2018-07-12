@@ -5,8 +5,11 @@
 ## Build
 
 ```bash
-# build for rpi3
-make build-rpi3
+# build for x86_64
+make
+
+# build for armhf
+make armhf
 ```
 
 ## Deploy
@@ -14,21 +17,25 @@ make build-rpi3
 ```bash
 # deploy on rpi3
 docker run --name caddy \
--v caddy-data:/var/lib/caddy \
--v caddy-certs:/root/.caddy \
--p 80:80 -p 443:443 \
-klutchell/caddy:rpi3-latest
+    -v /path/to/caddyfile:/usr/src/app/Caddyfile
+    -v caddy-data:/var/lib/caddy \
+    -v caddy-certs:/root/.caddy \
+    -p 80:80 -p 443:443 \
+    -e TZ=America/Toronto \
+    -e ACME_EMAIL=your@email.com \
+    klutchell/caddy
 ```
 
-## Parameters
+## Environment
 
-* `-v caddy-data:/var/lib/caddy` - persistent data volume
-* `-v caddy-certs:/root/.caddy` - persistent certificates volume
-* `-p 80:80 -p 443:443` - ports to expose
+|Name|Description|Example|
+|---|---|---|
+|`ACME_EMAIL`|email address to agree to LetsEncrypt TOS|`your@email.com`|
+|`TZ`|(optional) container timezone|`America/Toronto`|
 
 ## Usage
 
-* add server definitions to `/var/lib/caddy/Caddyfile`
+add server definitions to `/var/lib/caddy/Caddyfile` or mount your own Caddyfile
 
 ## Author
 

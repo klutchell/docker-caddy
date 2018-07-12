@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/bin/sh
 
-/usr/local/bin/caddy -agree -conf "$CADDY_FILE" -email "$ACME_EMAIL"
+/usr/local/bin/caddy -agree -conf "${CADDY_FILE}" -email "${ACME_EMAIL}"

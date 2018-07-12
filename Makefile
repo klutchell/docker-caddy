@@ -1,37 +1,52 @@
-NS		:= klutchell
-REPO	:= caddy
-TAG		:= $$(git rev-parse --short HEAD)
-IMG		:= ${NS}/${REPO}
+
+DOCKER_REPO		:= klutchell/caddy
+BUILD_VERSION	:= $$(git describe --tags --long --dirty --always)
+BUILD_DATE		:= $$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+.DEFAULT_GOAL	:= build
+
+tag-major: VERSION	:= $$(docker run --rm treeder/bump --input "$$(git describe --tags)" major)
+tag-major:
+	@git tag -a ${VERSION} -m "version ${VERSION}"
+	@git push --tags
+
+tag-minor: VERSION	:= $$(docker run --rm treeder/bump --input "$$(git describe --tags)" minor)
+tag-minor:
+	@git tag -a ${VERSION} -m "version ${VERSION}"
+	@git push --tags
+
+tag-patch: VERSION	:= $$(docker run --rm treeder/bump --input "$$(git describe --tags)" patch)
+tag-patch:
+	@git tag -a ${VERSION} -m "version ${VERSION}"
+	@git push --tags
+
+tag:	tag-patch
 
 build:
-	@docker build -t ${IMG}:${TAG} .
-	@docker tag ${IMG}:${TAG} ${IMG}:latest
-
-build-rpi3:
-	@docker build -t ${IMG}:rpi3-${TAG} -f Dockerfile.rpi3 .
-	@docker tag ${IMG}:rpi3-${TAG} ${IMG}:rpi3-latest
+	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${DOCKER_REPO}:${BUILD_VERSION} DOCKERFILE_PATH=Dockerfile ./hooks/build
+	@docker tag ${DOCKER_REPO}:${BUILD_VERSION} ${DOCKER_REPO}:latest
 
 build-nc:
-	@docker build --no-cache -t ${IMG} .
-	@docker tag ${IMG}:${TAG} ${IMG}:latest
+	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${DOCKER_REPO}:${BUILD_VERSION} DOCKERFILE_PATH=Dockerfile ./hooks/build --no-cache
+	@docker tag ${DOCKER_REPO}:${BUILD_VERSION} ${DOCKER_REPO}:latest
 
-build-rpi3-nc:
-	@docker build --no-cache -t ${IMG}:rpi3-${TAG} -f Dockerfile.rpi3 .
-	@docker tag ${IMG}:rpi3-${TAG} ${IMG}:rpi3-latest
+build-armhf:
+	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${DOCKER_REPO}:armhf-${BUILD_VERSION} DOCKERFILE_PATH=Dockerfile.armhf ./hooks/build
+	@docker tag ${DOCKER_REPO}:armhf-${BUILD_VERSION} ${DOCKER_REPO}:armhf-latest
+
+build-armhf-nc:
+	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${DOCKER_REPO}:armhf-${BUILD_VERSION} DOCKERFILE_PATH=Dockerfile.armhf ./hooks/build --no-cache
+	@docker tag ${DOCKER_REPO}:armhf-${BUILD_VERSION} ${DOCKER_REPO}:armhf-latest
 
 push:
-	@docker push ${IMG}:${TAG}
-	@docker push ${IMG}:latest
+	@docker push ${DOCKER_REPO}:${BUILD_VERSION}
 
-push-rpi3:
-	@docker push ${IMG}:rpi3-${TAG}
-	@docker push ${IMG}:rpi3-latest
+push-armhf:
+	@docker push ${DOCKER_REPO}:armhf-${BUILD_VERSION}
 
-release: build tag push
+release:		build push
 
-release-rpi3: build-rpi3 push-rpi3
+release-armhf:	build-armhf push-armhf
 
-rpi3: build-rpi3
-
-default: build
+armhf:			build-armhf
 

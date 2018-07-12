@@ -1,14 +1,20 @@
 FROM resin/raspberrypi3-alpine:3.6
 
-LABEL maintainer="kylemharding@gmail.com"
+ARG BUILD_DATE
+ARG BUILD_VERSION
 
-# allow building on x86
-RUN [ "cross-build-start" ]
+LABEL build_version="${BUILD_VERSION}"
+LABEL build_date="${BUILD_DATE}"
+LABEL maintainer="kylemharding@gmail.com"
 
 # default plugins
 ARG PLUGINS="http.reauth,tls.dns.cloudflare"
 
+# caddyfile path
 ENV CADDY_FILE /usr/src/app/Caddyfile
+
+# allow building on x86
+RUN [ "cross-build-start" ]
 
 # install curl
 RUN apk add --no-cache curl
@@ -16,11 +22,11 @@ RUN apk add --no-cache curl
 # install caddy
 RUN curl https://getcaddy.com | bash -s personal $PLUGINS
 
-# install example files
+# work in app dir
 WORKDIR /usr/src/app
 
-RUN curl -o index.html https://raw.githubusercontent.com/abiosoft/caddy-docker/master/index.html \
-	&& curl -o Caddyfile https://raw.githubusercontent.com/abiosoft/caddy-docker/master/Caddyfile
+# copy src files
+COPY start.sh index.html Caddyfile ./
 
 # expose ports
 EXPOSE 80 443 2015
@@ -28,11 +34,8 @@ EXPOSE 80 443 2015
 # persist caddy data
 VOLUME /usr/src/app
 
-# install start script
-COPY start.sh /usr/local/bin/
-
-# run caddy on boot
-CMD [ "/usr/local/bin/start.sh" ]
+# run start script on boot
+CMD ["/bin/sh", "start.sh"]
 
 # end cross build
 RUN [ "cross-build-end" ]
