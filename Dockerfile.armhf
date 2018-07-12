@@ -17,7 +17,7 @@ ENV CADDY_FILE /usr/src/app/Caddyfile
 RUN [ "cross-build-start" ]
 
 # install curl
-RUN apk add --no-cache curl
+RUN apk add --no-cache curl bash
 
 # install caddy
 RUN curl https://getcaddy.com | bash -s personal $PLUGINS
