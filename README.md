@@ -18,11 +18,10 @@ make armhf
 # deploy on rpi3
 docker run --name caddy \
     -v /path/to/caddyfile:/usr/src/app/Caddyfile
-    -v caddy-data:/var/lib/caddy \
-    -v caddy-certs:/root/.caddy \
+    -v caddy_root:/www \
+    -v caddy_certs:/root/.caddy \
     -p 80:80 -p 443:443 \
-    -e TZ=America/Toronto \
-    -e ACME_EMAIL=your@email.com \
+    -e CADDY_EMAIL=example@address.com \
     klutchell/caddy
 ```
 

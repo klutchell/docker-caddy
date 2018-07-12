@@ -10,13 +10,13 @@ services:
             - '443:443'
         restart: unless-stopped
         volumes:
-            - 'caddy_data:/var/lib/caddy'
+            - 'caddy_root:/www'
             - 'caddy_certs:/root/.caddy'
         environment:
             - 'TZ=America/Toronto'
-            - 'ACME_EMAIL=your@email.com'
+            - 'CADDY_EMAIL=example@address.com'
 
 volumes:
 
-    caddy_data:
+    caddy_root:
     caddy_certs:
