@@ -16,7 +16,6 @@ make armhf
 
 ```bash
 docker run --name caddy \
-    -v /path/to/caddyfile:/usr/src/app/Caddyfile
     -v caddy_root:/www \
     -v caddy_certs:/root/.caddy \
     -p 80:80 -p 443:443 -p 2015:2015 \
@@ -36,6 +35,24 @@ docker run --name caddy \
 ## Usage
 
 add server definitions to `/www/Caddyfile` or mount your own Caddyfile
+
+```bash
+# example Caddyfile to proxy http/https requests to another server
+my.customdomain.com {
+    gzip
+    tls {
+        dns cloudflare
+    }
+    reauth {
+        path /
+        simple myuser=mypassword
+    }
+    proxy / 192.168.86.13:80 {
+        transparent
+        websocket
+    }
+}
+```
 
 ## Author
 
