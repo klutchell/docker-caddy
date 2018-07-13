@@ -15,7 +15,6 @@ make armhf
 ## Deploy
 
 ```bash
-# deploy on rpi3
 docker run --name caddy \
     -v /path/to/caddyfile:/usr/src/app/Caddyfile
     -v caddy_root:/www \
@@ -44,7 +43,7 @@ Kyle Harding <kylemharding@gmail.com>
 
 ## License
 
-_tbd_
+[MIT License](./LICENSE)
 
 ## Acknowledgments
 
